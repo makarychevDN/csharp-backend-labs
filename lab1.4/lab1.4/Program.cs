@@ -12,10 +12,12 @@ app.MapGet("/books", () =>
 
 app.MapGet("/books/{id}", (int id) =>
 {
-    if (id >= books.Count)
+    var requiredBook = books.FirstOrDefault(books => books.Id == id);
+
+    if (requiredBook == null)
         return Results.BadRequest($"the book with id {id} is non found");
 
-    return Results.Ok(books[id]);
+    return Results.Ok(requiredBook);
 });
 
 app.MapPost("/books", (Book book) =>
@@ -24,7 +26,7 @@ app.MapPost("/books", (Book book) =>
         return Results.BadRequest("can't add null as a book");
 
     books.Add(book);
-    return Results.Created($"/books/{books.IndexOf(book)}", book);
+    return Results.Created($"/books/{book.Id}", book);
 });
 
 app.Run();
