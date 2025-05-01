@@ -29,4 +29,13 @@ app.MapPost("/books", (Book book) =>
     return Results.Created($"/books/{book.Id}", book);
 });
 
+app.MapPost("/booksrange", (Book[] newBooks) =>
+{
+    if (newBooks == null)
+        return Results.BadRequest("can't add null as a book");
+
+    books.AddRange(newBooks);
+    return Results.Created($"/booksrange", books);
+});
+
 app.Run();
